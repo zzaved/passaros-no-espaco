@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+
+        <title>Exercício do Pássaro</title>
+
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;  
+            }
+        </style>
+
+    </head>
+
+    <body>
+
+        <script>
+
+            //criando uma variável que tem o valor de 0
+
+            var i = 0;
+
+            //estrutura de repetição white para fazer se repetir 10 vezes no console a frase abaixo
+
+            while(i < 10){
+                    console.log("o código está funcionando");
+                    i++;
+                }
+
+            //configurando uma variável
+
+            var config = {
+                    type: Phaser.AUTO,
+                    width: 800,
+                    height: 600,
+
+                //pre definindo as funções que irão ser utilizadas a seguir
+
+                    scene: {
+                        //a função preload é responsável por carregar os conteúdos que serão utilizados antes do jogo
+                        preload: preload,
+                        //a função create cria algum elemento que irá ser trabalhado
+                        create: create,
+                        //a função update será responsável pela movimentação daquele movimento de acordo com uma condição
+                        update: update
+
+                    }
+                };
+
+                //essa variavel pega todas as informações que voce preencheu acima e as adiciona no jogo
+
+                var game = new Phaser.Game(config);
+
+                //abaixo, estou criando as duas variáveis dos passaros no jogo
+
+                var passarinho;
+                var passarinho2;
+
+                //carregando os conteúdos que serão carregados no jogo    
+
+                function preload() {
+                    //o background do jogo
+                    this.load.image('bg', 'assets/bg_space.png');
+                    //o primeiro passaro
+                    this.load.spritesheet('bird', 'assets/bird-purple.png', {frameWidth: 75, frameHeight: 75});
+                    //o segundo passaro
+                    this.load.spritesheet('bird2', 'assets/bird-green.png', {frameWidth: 75, frameHeight: 75});
+                }
+
+                //criando todos os detalhes dos elementos que serão trabalhados
+
+                function create() {
+
+                    //adiciona a imagem a um frame
+
+                    this.add.image(400, 300, 'bg').setScale(1.2);
+
+                    //criando o primeiro passaro e a sua localização inicial
+
+                    passarinho = this.add.sprite(0,0,'bird').setScale(1.3);
+
+                    //criando o segundo passaro e a sua localizacao inicial
+
+                    passarinho2 = this.add.sprite(100,100, 'bird2').setScale(1.3);
+                
+                    //codigo para criar a animação do primeiro passaro voando
+
+                    this.anims.create({
+                        key: 'fly',
+
+                        //separei a imagem em 7 partes iguais
+
+                        frames: this.anims.generateFrameNumbers('bird', {start: 0, end: 7}),
+                        frameRate: 10,
+                        repeat: -1
+
+                    });
+
+                    //codigo para criar a animação do segundo passaro voando
+
+                    this.anims.create({
+                        key: 'fly2',
+
+                        //separei a imagem em 7 partes iguais
+
+                        frames: this.anims.generateFrameNumbers('bird2', {start: 0, end: 7}),
+                        frameRate: 10,
+                        repeat: -1
+
+                    });
+
+                    //essa função abaixo faz com que toda vez que a animação de voo esteja rodando, irá ser retornado true
+                    passarinho.anims.play('fly', true);
+                    passarinho2.anims.play('fly2', true);
+                }
+
+                //função para a movimentação dos elementos 
+
+                function update() { 
+
+                    //inicio da movimentação do eixo x abaixo
+                    //se a posição de x do passarinho for igual a 100, o if irá retornar true
+
+                    if(passarinho.x === 0){
+                        passarinho.setFlip(false, false);
+                        passarinho.ida=true;
+                    }
+
+                    //condição a qual fala que se a posição de x do passarinho for menor que 700 e ele estiver retornando true, ande a cada 5 blocos
+
+                    if (passarinho.x < 800 && passarinho.ida === true){
+                        passarinho.x += 5;
+                    }
+
+                    //ao chegar na posição 700 de x, iniciar a retornar falso
+
+                    if (passarinho.x === 800) {
+                        passarinho.setFlip(true,false);
+                        passarinho.ida = false;
+                    }
+
+                    //ao estar em uma posição maior que 100 e retornando falso, então que o passarinho retorne 5 blocos por vez
+
+                    if (passarinho.x > 0 && passarinho.ida === false){
+                        passarinho.x -= 5;
+                    }
+
+                    //inicio da movimentação do eixo Y abaixo
+                    //se a posição de y do passarinho for igual a 100, o if irá retornar true
+
+                    if(passarinho.y === 0){
+                        passarinho.ida2=true;
+                    }
+
+                    //condição a qual fala que se a posição de x do passarinho for menor que 700 e ele estiver retornando true, ande a cada 5 blocos
+
+                    if (passarinho.y < 600 && passarinho.ida2 === true){
+                        passarinho.y += 5;
+                    }
+
+                    //ao chegar na posição 700 de x, iniciar a retornar falso
+
+                    if (passarinho.y === 600) {
+                        passarinho.ida2 = false;
+                    }
+
+                    //ao estar em uma posição maior que 100 e retornando falso, então que o passarinho retorne 5 blocos por vez
+
+                    if (passarinho.y > 0 && passarinho.ida2 === false){
+                        passarinho.y -= 5;
+
+                    }
+
+                    //--------------------------------------------------
+
+                    //inicio da movimentação do eixo x abaixo
+                    //se a posição de x do passarinho for igual a 100, o if irá retornar true
+
+                    if(passarinho2.x === 100){
+                        passarinho2.setFlip(false, false);
+                        passarinho2.ida=true;
+                    }
+
+                    //condição a qual fala que se a posição de x do passarinho for menor que 700 e ele estiver retornando true, ande a cada 5 blocos
+
+                    if (passarinho2.x < 800 && passarinho2.ida === true){
+                        passarinho2.x += 5;
+                    }
+
+                    //ao chegar na posição 700 de x, iniciar a retornar falso
+
+                    if (passarinho2.x === 800) {
+                        passarinho2.setFlip(true,false);
+                        passarinho2.ida = false;
+                    }
+
+                    //ao estar em uma posição maior que 100 e retornando falso, então que o passarinho retorne 5 blocos por vez
+
+                    if (passarinho2.x > 100 && passarinho2.ida === false){
+                        passarinho2.x -= 5;
+                    }
+
+                    //inicio da movimentação do eixo Y abaixo
+                    //se a posição de y do passarinho for igual a 100, o if irá retornar true
+
+                    if(passarinho2.y === 100){
+                        passarinho2.ida2=true;
+                    }
+
+                    //condição a qual fala que se a posição de x do passarinho for menor que 700 e ele estiver retornando true, ande a cada 5 blocos
+
+                    if (passarinho2.y < 600 && passarinho2.ida2 === true){
+                        passarinho2.y += 5;
+                    }
+
+                    //ao chegar na posição 700 de x, iniciar a retornar falso
+
+                    if (passarinho2.y === 600) {
+                        passarinho2.ida2 = false;
+                    }
+
+                    //ao estar em uma posição maior que 100 e retornando falso, então que o passarinho retorne 5 blocos por vez
+
+                    if (passarinho2.y > 100 && passarinho2.ida2 === false){
+                        passarinho2.y -= 5;
+
+                    }
+
+                }
+
+        </script>
+
+    </body>
+
+</html>
